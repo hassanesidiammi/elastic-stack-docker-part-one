@@ -1,0 +1,18 @@
+version: "3.8"
+
+services:
+  logstash:
+    image: docker.elastic.co/logstash/logstash:${STACK_VERSION}
+    labels:
+      co.elastic.logs/module: logstash
+    user: root
+    volumes:
+      - vl_certs:/usr/share/logstash/certs
+      - vl_logstash:/usr/share/logstash/data
+      - "./ingest/logstash/:/usr/share/logstash/ingest_data/"
+      - "./logstash.conf:/usr/share/logstash/pipeline/logstash.conf:ro"
+    environment:
+      - xpack.monitoring.enabled=false
+      - ELASTIC_USER=elastic
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+      - ELASTIC_HOSTS=https://elastic:9200
